@@ -1,4 +1,4 @@
-#[derive(Debug)]
+#[derive(Debug,PartialEq)]
 pub enum TokenType {
     LBrace,
     RBrace,
@@ -20,8 +20,8 @@ pub enum TokenType {
 #[derive(Debug)]
 pub struct Token {
     index: usize,
-    lexeme: String,
-    token_type: TokenType,
+    pub lexeme: String,
+    pub token_type: TokenType,
 }
 
 const NUMERICS: [char; 11] = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.'];
