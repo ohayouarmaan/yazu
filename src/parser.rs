@@ -79,7 +79,7 @@ impl<'a> Parser<'a> {
 
     pub fn parse_array(&mut self) -> Object {
         let mut elements: Vec<Box<Object>> = vec![];
-        while let Some(current_token) = self.tokens.get(self.index) {
+        while let Some(_) = self.tokens.get(self.index) {
             let element = self.parse_object();
             elements.push(Box::new(element));
             self.index += 1;
@@ -105,17 +105,6 @@ impl<'a> Parser<'a> {
                 return true;
             } else {
                 return false;
-            }
-        }
-        panic!("PARSER ERROR: no token exists at index: {}", self.index);
-    }
-
-    pub fn consume(&self, expected_type: TokenType, message: &str) -> &Token {
-        if let Some(token) = self.tokens.get(self.index) {
-            if token.token_type == expected_type {
-                return token;
-            } else {
-                panic!("PARSER ERROR: {message}");
             }
         }
         panic!("PARSER ERROR: no token exists at index: {}", self.index);
@@ -167,7 +156,7 @@ impl<'a> Parser<'a> {
     }
 
     pub fn parse(&mut self) {
-        if let Some(token) = self.tokens.get(self.index) {
+        if let Some(_) = self.tokens.get(self.index) {
             self.root_object = Some(self.parse_object());
         }
     }

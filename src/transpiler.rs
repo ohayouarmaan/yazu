@@ -1,12 +1,10 @@
-use std::collections::btree_map::Keys;
-
 use crate::parser::{Object, ObjectType};
 
-pub struct transpiler<'a> {
+pub struct Transpiler<'a> {
     root_object: &'a Object
 }
 
-impl<'a> transpiler<'a> {
+impl<'a> Transpiler<'a> {
     pub fn new(root_object: &'a Object) -> Self {
         Self {
             root_object
@@ -23,7 +21,7 @@ impl<'a> transpiler<'a> {
                 let mut current_key_index = 0;
                 for (x, value) in map {
                     current_key_index += 1;
-                    for i in 0..(depth + 1) {
+                    for _ in 0..(depth + 1) {
                         built_string.push_str("  ")
                     }
                     built_string.push_str(&format!("\"{x}\""));
@@ -37,7 +35,7 @@ impl<'a> transpiler<'a> {
                         built_string.push_str("\n");
                     }
                 }
-                for i in 0..(depth) {
+                for _ in 0..(depth) {
                     built_string.push_str("  ")
                 }
                 built_string.push_str("}");
