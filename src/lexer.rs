@@ -171,6 +171,8 @@ impl Lexer {
                             token_type: TokenType::Null
                         })
                     }
+                } else {
+                    panic!("Invalid character {c}");
                 }
             }
         }
