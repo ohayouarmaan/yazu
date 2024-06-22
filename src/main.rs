@@ -14,7 +14,8 @@ fn main() {
                 "role": "software engineer",
                 "test_number": 5_00_000,
                 "test_boolean": false,
-                "test_null": null
+                "test_null": null,
+                "please work": {}
             }
         }
     }
@@ -22,7 +23,6 @@ fn main() {
 
     let mut l = lexer::Lexer::new(json_string);
     l.lex();
-    println!("tokens: {:?}", l.tokens);
     let mut p = parser::Parser::new(&l.tokens);
     p.parse();
     if let Some(root_object) = p.root_object {

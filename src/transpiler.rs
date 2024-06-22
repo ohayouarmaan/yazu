@@ -16,6 +16,9 @@ impl<'a> transpiler<'a> {
     pub fn visit_object(&self, obj: &Object, depth: i8) -> String {
         match &obj.obj_type {
             ObjectType::Map(map) => {
+                if map.len() == 0 {
+                    return "{}".to_owned();
+                }
                 let mut built_string = String::from("{\n");
                 let mut current_key_index = 0;
                 for (x, value) in map {

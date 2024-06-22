@@ -72,7 +72,9 @@ impl<'a> Parser<'a> {
                 }
             }
         }
-        todo!();
+        return Object{
+            obj_type: ObjectType::Map(map)
+        };
     }
 
     pub fn parse_array(&mut self) -> Object {
