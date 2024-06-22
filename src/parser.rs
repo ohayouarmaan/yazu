@@ -4,7 +4,8 @@ use crate::lexer::{Token, TokenType};
 #[derive(Debug)]
 pub struct Parser<'a> {
     tokens: &'a Vec<Token>,
-    index: usize
+    index: usize,
+    pub root_object: Option<Object>
 }
 
 #[derive(Debug)]
@@ -20,7 +21,7 @@ pub enum ObjectType {
 
 #[derive(Debug)]
 pub struct Object {
-    obj_type: ObjectType,
+    pub obj_type: ObjectType,
 }
 
 impl<'a> Parser<'a> {
@@ -28,7 +29,8 @@ impl<'a> Parser<'a> {
     pub fn new(tokens: &'a Vec<Token>) -> Self {
         Self {
             tokens,
-            index: 0
+            index: 0,
+            root_object: None
         }
     }
 
@@ -164,7 +166,7 @@ impl<'a> Parser<'a> {
 
     pub fn parse(&mut self) {
         if let Some(token) = self.tokens.get(self.index) {
-            println!("{:?}", self.parse_object());
+            self.root_object = Some(self.parse_object());
         }
     }
 }

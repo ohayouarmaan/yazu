@@ -116,7 +116,7 @@ impl Lexer {
                     })
                 } else if *c == 'f' {
                     let start_index = self.index;
-                    let mut built_string = String::new();
+                    let mut built_string = String::from('f');
                     self.index += 1;
                     while let Some(&current_character) = self.source_content.get(self.index) {
                         if vec!['a', 'l', 's', 'e'].contains(&current_character) {
@@ -135,7 +135,7 @@ impl Lexer {
                     }
                 } else if *c == 't' {
                     let start_index = self.index;
-                    let mut built_string = String::new();
+                    let mut built_string = String::from('t');
                     self.index += 1;
                     while let Some(&current_character) = self.source_content.get(self.index) {
                         if vec!['r', 'u', 'e'].contains(&current_character) {
@@ -154,7 +154,7 @@ impl Lexer {
                     }
                 } else if *c == 'n' {
                     let start_index = self.index;
-                    let mut built_string = String::new();
+                    let mut built_string = String::from('n');
                     self.index += 1;
                     while let Some(&current_character) = self.source_content.get(self.index) {
                         if vec!['u', 'l', 'l'].contains(&current_character) {
