@@ -1,4 +1,5 @@
 mod lexer;
+mod parser;
 
 fn main() {
     let json_string = r#"
@@ -21,5 +22,6 @@ fn main() {
     "#.to_string();
 
     let mut l = lexer::Lexer::new(json_string);
-    l.lex()
+    l.lex();
+    let p = parser::Parser::new(l.tokens);
 }

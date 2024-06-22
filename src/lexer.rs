@@ -4,12 +4,16 @@ pub enum TokenType {
     RBrace,
     LSquare,
     RSquare,
+    Comma,
+    Colon,
+
+    // Datatypes according to the official json grammar (https://www.json.org/json-en.html)
+    // Arrays and Objects should be built in the parser.
     String,
     Number,
-    Comma,
     False,
     True,
-    Colon
+    Null
 }
 
 
@@ -25,7 +29,7 @@ const NUMERICS: [char; 11] = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 
 
 pub struct Lexer {
     source_content: Vec<char>,
-    tokens: Vec<Token>,
+    pub tokens: Vec<Token>,
     index: usize
 } 
 
@@ -147,6 +151,25 @@ impl Lexer {
                             token_type: TokenType::True
                         })
                     }
+                } else if *c == 'n' {
+                    let start_index = self.index;
+                    let mut built_string = String::new();
+                    self.index += 1;
+                    while let Some(&current_character) = self.source_content.get(self.index) {
+                        if vec!['u', 'l', 'l'].contains(&current_character) {
+                            built_string.push(current_character);
+                            self.index += 1;
+                        } else {
+                            break;
+                        }
+                    }
+                    if built_string == "null" {
+                        self.tokens.push(Token {
+                            index: start_index,
+                            lexeme: built_string,
+                            token_type: TokenType::Null
+                        })
+                    }
                 }
             }
         }
@@ -187,7 +210,5 @@ impl Lexer {
         while let Some(&current_character) = self.source_content.get(self.index) {
             self.match_on_current_character(&current_character);
         }
-        println!("{:?}", self.tokens);
     }
-
 }
