@@ -1,5 +1,4 @@
 use std::collections::HashMap;
-
 use crate::lexer::{Token, TokenType};
 
 #[derive(Debug)]
@@ -32,7 +31,7 @@ impl<'a> Parser<'a> {
             index: 0
         }
     }
-    
+
     pub fn parse_map(&mut self) -> Object {
         let mut map: HashMap<String, Box<Object>> = HashMap::new();
         while let Some(token) = self.tokens.get(self.index) {

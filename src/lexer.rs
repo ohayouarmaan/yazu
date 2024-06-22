@@ -16,7 +16,6 @@ pub enum TokenType {
     Null
 }
 
-
 #[derive(Debug)]
 pub struct Token {
     index: usize,
