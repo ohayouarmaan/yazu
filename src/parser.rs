@@ -53,7 +53,7 @@ impl<'a> Parser<'a> {
                                 continue;
                             } else {
                                 if self.tokens[self.index].token_type != TokenType::RBrace {
-                                    panic!("Expected a '}}' got {:?}", self.tokens[self.index]);
+                                    panic!("Expected a '}}' got {:?} line:{}", self.tokens[self.index], self.tokens[self.index].line);
                                 } else {
                                     return Object {
                                         obj_type: ObjectType::Map(map)
@@ -61,7 +61,7 @@ impl<'a> Parser<'a> {
                                 }
                             }
                         } else {
-                            panic!("Expected a ':' got {:?}", should_be_colon_token);
+                            panic!("Expected a ':' got {:?} line:{}", should_be_colon_token, should_be_colon_token.line);
                         }
                     } else {
                         panic!("No token found.");
@@ -90,7 +90,7 @@ impl<'a> Parser<'a> {
                     self.index += 1;
                     continue;
                 } else {
-                    panic!("Invalid Token.");
+                    panic!("Invalid Token. line:{}", next_token.line);
                 }
             }
         }
@@ -158,7 +158,7 @@ impl<'a> Parser<'a> {
                     }
                 },
                 _ => {
-                    panic!("invalid token: {:?}", token);
+                    panic!("invalid token: {:?} line:{}", token, token.line);
                 }
             }
         } else {
