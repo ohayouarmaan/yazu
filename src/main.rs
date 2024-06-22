@@ -6,8 +6,12 @@ mod parser;
 fn main() {
     let json_string = r#"
     {
-        "name": "John Doe",
-        "foo": "bar"
+        "name": {
+            "first_name": "Armaan",
+            "last_name": "Gupta"
+        },
+        "foo": 57_00_000,
+        "test": ["Armaan", 2]
     }
     "#.to_string();
 

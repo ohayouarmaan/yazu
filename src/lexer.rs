@@ -24,7 +24,8 @@ pub struct Token {
     pub token_type: TokenType,
 }
 
-const NUMERICS: [char; 11] = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.'];
+const NUMERICS: [char; 12] = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '_'];
+const NUMBERS: [char; 10] = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
 
 pub struct Lexer {
@@ -105,7 +106,7 @@ impl Lexer {
             c => {
                 if vec![' ', '\t', '\n'].contains(c){
                     self.index += 1;
-                } else if NUMERICS.contains(c) {
+                } else if NUMBERS.contains(c) {
                     let start_index = self.index;
                     let built_number = self.build_number();
                     self.tokens.push(Token {
@@ -177,8 +178,15 @@ impl Lexer {
 
     pub fn build_number(&mut self) -> String {
         let mut number: String = String::new();
+        let mut dot_count = 0;
         while let Some(&current_character) = self.source_content.get(self.index) {
             if NUMERICS.contains(&current_character) {
+                if current_character == '.' {
+                    if dot_count > 0 {
+                        panic!("Invalid Number: {:?}", self.index);
+                    }
+                    dot_count += 1;
+                }
                 number.push(current_character);
                 self.index += 1;
             } else {

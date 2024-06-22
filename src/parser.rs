@@ -10,6 +10,9 @@ pub struct Parser<'a> {
 
 #[derive(Debug)]
 pub enum ObjectType {
+    False,
+    True,
+    Null,
     Number(String),
     String(String),
     Array(Vec<Box<Object>>),
@@ -71,6 +74,28 @@ impl<'a> Parser<'a> {
         todo!();
     }
 
+    pub fn parse_array(&mut self) -> Object {
+        let mut elements: Vec<Box<Object>> = vec![];
+        while let Some(current_token) = self.tokens.get(self.index) {
+            let element = self.parse_object();
+            elements.push(Box::new(element));
+            self.index += 1;
+            if let Some(next_token) = self.tokens.get(self.index) {
+                if next_token.token_type == TokenType::RSquare {
+                    break;
+                } else if next_token.token_type == TokenType::Comma {
+                    self.index += 1;
+                    continue;
+                } else {
+                    panic!("Invalid Token.");
+                }
+            }
+        }
+        return Object {
+            obj_type: ObjectType::Array(elements)
+        }
+    }
+
     pub fn match_token(&mut self, expected_type: TokenType) -> bool {
         if let Some(token) = self.tokens.get(self.index) {
             if token.token_type == expected_type {
@@ -100,13 +125,37 @@ impl<'a> Parser<'a> {
                     self.index += 1;
                     return self.parse_map();
                 },
+                TokenType::LSquare => {
+                    self.index += 1;
+                    return self.parse_array();
+                },
                 TokenType::String => {
                     return Object {
                         obj_type: ObjectType::String(token.lexeme.clone())
                     }
                 },
+                TokenType::Number => {
+                    return Object {
+                        obj_type: ObjectType::Number(token.lexeme.clone())
+                    }
+                },
+                TokenType::False => {
+                    return Object {
+                        obj_type: ObjectType::False
+                    }
+                },
+                TokenType::True => {
+                    return Object {
+                        obj_type: ObjectType::True
+                    }
+                },
+                TokenType::Null => {
+                    return Object {
+                        obj_type: ObjectType::Null
+                    }
+                },
                 _ => {
-                    panic!("invalid token");
+                    panic!("invalid token: {:?}", token);
                 }
             }
         } else {
