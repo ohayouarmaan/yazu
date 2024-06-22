@@ -1,5 +1,6 @@
 # Yazu - A JSON Formatter in Rust
 ![Logo](./Yazu.png)
+
 Yazu is a high-performance JSON formatter written in Rust. It is designed to be fast, efficient, and easy to use. Yazu features a custom lexer, parser, and transpiler to ensure the highest level of performance and flexibility.
 
 ## Table of Contents
