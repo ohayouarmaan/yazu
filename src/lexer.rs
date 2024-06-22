@@ -16,7 +16,7 @@ pub enum TokenType {
     Null
 }
 
-#[derive(Debug)]
+#[derive(Debug,PartialEq)]
 pub struct Token {
     index: usize,
     pub lexeme: String,
@@ -78,9 +78,10 @@ impl Lexer {
             },
             '"' => {
                 self.index += 1;
+                let start_index = self.index;
                 let built_string = self.build_string();
                 self.tokens.push(Token {
-                    index: self.index,
+                    index: start_index,
                     lexeme: built_string,
                     token_type: TokenType::String
                 });
@@ -219,5 +220,63 @@ impl Lexer {
         while let Some(&current_character) = self.source_content.get(self.index) {
             self.match_on_current_character(&current_character);
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::lexer::{Lexer, Token, TokenType};
+
+    #[test]
+    fn test_lexer() {
+        let mut l = Lexer::new("{\"foo\": { \"jane\": \"doe\" }}".to_string());
+        l.lex();
+        assert_eq!(l.tokens, vec![
+            Token { 
+                index: 0,
+                lexeme: "{".to_owned(),
+                token_type: TokenType::LBrace
+            },
+            Token { 
+                index: 2,
+                lexeme: "foo".to_owned(),
+                token_type: TokenType::String
+            },
+            Token { 
+                index: 6,
+                lexeme: ":".to_owned(),
+                token_type: TokenType::Colon
+            },
+            Token { 
+                index: 8,
+                lexeme: "{".to_owned(),
+                token_type: TokenType::LBrace
+            },
+            Token { 
+                index: 11,
+                lexeme: "jane".to_owned(),
+                token_type: TokenType::String
+            },
+            Token { 
+                index: 16,
+                lexeme: ":".to_owned(),
+                token_type: TokenType::Colon
+            },
+            Token { 
+                index: 19,
+                lexeme: "doe".to_owned(),
+                token_type: TokenType::String
+            },
+            Token { 
+                index: 24,
+                lexeme: "}".to_owned(),
+                token_type: TokenType::RBrace
+            },
+            Token { 
+                index: 25,
+                lexeme: "}".to_owned(),
+                token_type: TokenType::RBrace
+            }
+        ]);
     }
 }
