@@ -41,6 +41,35 @@ impl<'a> Transpiler<'a> {
                 built_string.push_str("}");
                 return built_string;
             },
+            ObjectType::Array(array) => {
+                let mut built_string = String::from("");
+                if array.len() == 0 { return "[]".to_string() };
+
+                built_string.push_str("[\n");
+                for _ in 0..(depth + 1) {
+                    built_string.push_str("  ");
+                }
+
+                let mut i = 0;
+                for obj in array {
+                    i += 1;
+                    let x = self.visit_object(obj, depth + 1);
+                    built_string.push_str(&x);
+                    if i != array.len() {
+                        built_string.push_str(",\n");
+                        for _ in 0..(depth + 1) {
+                            built_string.push_str("  ");
+                        }
+                    } else {
+                        built_string.push_str("\n");
+                    }
+                }
+                for _ in 0..(depth) {
+                    built_string.push_str("  ");
+                }
+                built_string.push_str("]");
+                return built_string;
+            },
             ObjectType::String(string) => {
                 return format!("\"{string}\"");
             },
@@ -56,9 +85,6 @@ impl<'a> Transpiler<'a> {
             ObjectType::True => {
                 return format!("true");
             },
-            _ => {
-                todo!("");
-            }
         }
     }
 
