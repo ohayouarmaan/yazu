@@ -229,6 +229,10 @@ impl Lexer {
                 None => {},
                 Some(x) => {
                     if *x != '"' {
+                        if *x == '\\' {
+                            built_string.push(*x);
+                            self.index += 1;
+                        }
                         built_string.push(*x);
                     } else {
                         break;

@@ -4,24 +4,7 @@ mod transpiler;
 
 fn main() {
     let json_string = r#"
-    {
-        "name": {
-            "first_name": "Armaan",
-            "last_name": "Gupta",
-            "employement": {
-                "test_number": 50000,
-                "role": "software engineer",
-                "test_boolean": false,
-                "please work": {},
-                "test_null": null,
-                "test_array": [
-                    "wow123",
-                    { "a": "b" },
-                    75_00_000
-                ]
-            }
-        }
-    }
+{"name":{"first_name":"Armaan","last_name":"Gup\"ta","employement":{"test_number":50000,"role":"software engineer","test_boolean":false,"please work":{},"test_null":null,"test_array":["wow123",{"a":"b"}]}}}
     "#.to_string();
 
     let mut l = lexer::Lexer::new(json_string);
