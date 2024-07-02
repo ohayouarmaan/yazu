@@ -79,20 +79,16 @@ impl<'a> Parser<'a> {
 
     pub fn parse_array(&mut self) -> Object {
         let mut elements: Vec<Box<Object>> = vec![];
-        while let Some(_) = self.tokens.get(self.index) {
+        while let Some(next_token) = self.tokens.get(self.index) {
+            if next_token.token_type == TokenType::RSquare {
+                break;
+            } else if next_token.token_type == TokenType::Comma {
+                self.index += 1;
+                continue;
+            }
             let element = self.parse_object();
             elements.push(Box::new(element));
             self.index += 1;
-            if let Some(next_token) = self.tokens.get(self.index) {
-                if next_token.token_type == TokenType::RSquare {
-                    break;
-                } else if next_token.token_type == TokenType::Comma {
-                    self.index += 1;
-                    continue;
-                } else {
-                    panic!("Invalid Token. line:{}", next_token.line);
-                }
-            }
         }
         return Object {
             obj_type: ObjectType::Array(elements)
