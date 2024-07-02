@@ -51,12 +51,12 @@ Yazu can be used as a command-line tool to format JSON files.
 
 1. To format a JSON file, use the following command:
     ```sh
-    cargo run --release -- <path_to_json_file>
+    cargo run --release <path_to_json_file>
     ```
 
 2. The formatted JSON will be output to the console. You can redirect this output to a file if needed:
     ```sh
-    cargo run --release -- <path_to_json_file> > formatted.json
+    cargo run --release <path_to_json_file> > formatted.json
     ```
 
 ## Contributing
