@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use indexmap::IndexMap;
 use crate::lexer::{Token, TokenType};
 
 #[derive(Debug)]
@@ -16,7 +16,7 @@ pub enum ObjectType {
     Number(String),
     String(String),
     Array(Vec<Box<Object>>),
-    Map(HashMap<String, Box<Object>>)
+    Map(IndexMap<String, Box<Object>>)
 }
 
 #[derive(Debug)]
@@ -35,7 +35,7 @@ impl<'a> Parser<'a> {
     }
 
     pub fn parse_map(&mut self) -> Object {
-        let mut map: HashMap<String, Box<Object>> = HashMap::new();
+        let mut map: IndexMap<String, Box<Object>> = IndexMap::new();
         while let Some(token) = self.tokens.get(self.index) {
             match token.token_type {
                 TokenType::RBrace => { break; },
