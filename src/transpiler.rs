@@ -88,9 +88,9 @@ impl<'a> Transpiler<'a> {
         }
     }
 
-    pub fn format(&self) {
+    pub fn format(&self) -> String {
         let depth = 0;
-        println!("{}", self.visit_object(self.root_object, depth));
+        return format!("{}", self.visit_object(self.root_object, depth));
     }
 }
 

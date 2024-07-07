@@ -45,7 +45,7 @@ impl Lexer {
         }
     }
 
-    fn match_on_current_character(&mut self, c: &char) {
+    fn match_on_current_character(&mut self, c: &char) -> Result<(), String>{
         match c {
             '{' => {
                 self.tokens.push(Token {
@@ -55,6 +55,7 @@ impl Lexer {
                     line: self.current_line
                 });
                 self.index += 1;
+                Ok(())
             },
             '}' => {
                 self.tokens.push(Token {
@@ -64,6 +65,7 @@ impl Lexer {
                     line: self.current_line
                 });
                 self.index += 1;
+                Ok(())
             },
             '[' => {
                 self.tokens.push(Token {
@@ -74,6 +76,7 @@ impl Lexer {
 
                 });
                 self.index += 1;
+                Ok(())
             },
             ']' => {
                 self.tokens.push(Token {
@@ -83,6 +86,7 @@ impl Lexer {
                     line: self.current_line
                 });
                 self.index += 1;
+                Ok(())
             },
             '"' => {
                 self.index += 1;
@@ -96,6 +100,7 @@ impl Lexer {
 
                 });
                 self.index += 1;
+                Ok(())
             },
             ':' => {
                 self.tokens.push(Token {
@@ -106,6 +111,7 @@ impl Lexer {
 
                 });
                 self.index += 1;
+                Ok(())
             },
             ',' => {
                 self.tokens.push(Token {
@@ -115,6 +121,7 @@ impl Lexer {
                     line: self.current_line
                 });
                 self.index += 1;
+                Ok(())
             },
             c => {
                 if vec![' ', '\t', '\n'].contains(c){
@@ -122,16 +129,18 @@ impl Lexer {
                         self.current_line += 1;
                     }
                     self.index += 1;
+                    Ok(())
                 } else if NUMBERS.contains(c) {
                     let start_index = self.index;
                     let built_number = self.build_number();
                     self.tokens.push(Token {
                         index: start_index,
-                        lexeme: built_number,
+                        lexeme: built_number?,
                         token_type: TokenType::Number,
                         line: self.current_line
 
-                    })
+                    });
+                    Ok(())
                 } else if *c == 'f' {
                     let start_index = self.index;
                     let mut built_string = String::from('f');
@@ -151,7 +160,10 @@ impl Lexer {
                             token_type: TokenType::False,
                             line: self.current_line
 
-                        })
+                        });
+                        return Ok(());
+                    } else {
+                        return Err(format!("Expected a false found: {}", built_string));
                     }
                 } else if *c == 't' {
                     let start_index = self.index;
@@ -172,7 +184,10 @@ impl Lexer {
                             token_type: TokenType::True,
                             line: self.current_line
 
-                        })
+                        });
+                        return Ok(());
+                    } else {
+                        return Err(format!("Expected true found: {}", built_string));
                     }
                 } else if *c == 'n' {
                     let start_index = self.index;
@@ -195,21 +210,22 @@ impl Lexer {
 
                         })
                     }
+                    Ok(())
                 } else {
-                    panic!("Invalid character {c} at line:{}", self.current_line);
+                    Err(format!("Invalid character {c} at line:{}", self.current_line))
                 }
             }
         }
     }
 
-    pub fn build_number(&mut self) -> String {
+    pub fn build_number(&mut self) -> Result<String, String> {
         let mut number: String = String::new();
         let mut dot_count = 0;
         while let Some(&current_character) = self.source_content.get(self.index) {
             if NUMERICS.contains(&current_character) {
                 if current_character == '.' {
                     if dot_count > 0 {
-                        panic!("Invalid Number: {:?}", self.index);
+                        return Err(format!("Invalid Number: {:?}", self.index))
                     }
                     dot_count += 1;
                 }
@@ -219,7 +235,7 @@ impl Lexer {
                 break;
             }
         }
-        return number;
+        return Ok(number);
     }
 
     pub fn build_string(&mut self) -> String {

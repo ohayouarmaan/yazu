@@ -5,3 +5,12 @@ edition = "2021"
 
 [dependencies]
 indexmap = "1.9.1"
+leptos = { version = "0.6.12", features = ["csr"] }
+leptos_meta = "0.6.12"
+
+[dependencies.web-sys]
+version = "0.3"
+features = ["Clipboard", "Navigator"]
+
+[env]
+RUSTFLAGS = "--cfg=web_sys_unstable_apis"
